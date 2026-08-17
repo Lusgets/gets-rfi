@@ -56,3 +56,17 @@
 @media(max-width:700px){.module-bar{overflow-x:auto;flex-wrap:nowrap}.module-btn{white-space:nowrap}.manual-grid{grid-template-columns:1fr}.panel-head{flex-direction:column}}
 
 .row-actions{display:flex;gap:6px;flex-wrap:wrap}.btn-danger{border-color:#9b2c2c!important;color:#8f1f1f!important;background:#fff!important}.btn-danger:hover{background:#f8eaea!important}.drive-actions{display:flex;gap:8px;flex-wrap:wrap}.check-label{display:flex!important;align-items:center;gap:8px}.check-label input{width:auto!important}.backup-status{font-size:13px;color:#666;padding:8px 0}.file-btn{display:inline-flex;align-items:center;cursor:pointer}
+
+
+/* v5 - RFI image attachments */
+.image-upload-block{margin-top:14px;border:1px solid #d8d8d8;background:#fafafa;padding:14px;border-radius:10px}
+.image-upload-head{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:12px}
+.image-upload-head b{display:block;font-size:13px}.image-upload-head span{display:block;font-size:11px;color:#6f6f6f;margin-top:3px}
+.image-picker{cursor:pointer;white-space:nowrap}.image-preview-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.image-card{position:relative;border:1px solid #d5d5d5;border-radius:8px;overflow:hidden;background:#fff}.image-card img{display:block;width:100%;height:120px;object-fit:cover}
+.image-card .image-meta{padding:7px 8px;font-size:10px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.image-card .remove-image{position:absolute;right:6px;top:6px;border:0;border-radius:999px;background:rgba(0,0,0,.74);color:#fff;width:26px;height:26px;cursor:pointer;font-size:16px;line-height:24px}
+.image-empty{grid-column:1/-1;border:1px dashed #c8c8c8;padding:16px;text-align:center;color:#888;font-size:12px;border-radius:8px;background:#fff}
+.pdf-image-appendix{page-break-before:always;break-before:page;box-sizing:border-box;width:210mm;min-height:297mm;padding:14mm 15mm 14mm;background:#fff;position:relative}
+.pdf-image-title{font-weight:700;font-size:18px;border-bottom:2px solid #333;padding-bottom:6px;margin:26px 0 12px}.pdf-image-grid{display:grid;grid-template-columns:1fr 1fr;gap:10mm 8mm}.pdf-image-item{break-inside:avoid;border:1px solid #bbb;padding:4mm}.pdf-image-item img{display:block;width:100%;height:90mm;object-fit:contain;background:#f8f8f8}.pdf-image-caption{font-size:9px;margin-top:3mm;color:#555;word-break:break-word}
+@media(max-width:800px){.image-preview-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.image-upload-head{align-items:flex-start;flex-direction:column}}
+@media print{.pdf-image-appendix{display:block}}

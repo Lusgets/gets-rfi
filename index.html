@@ -82,6 +82,10 @@
           <div class="grid-3"><label>Responded By<input id="respondedBy" /></label><label>Response Date<input id="responseDate" type="date" /></label><label>Response Discipline / Party<input id="responseParty" /></label></div>
           <div class="section-title">G. Required Action / Closure</div><label>Instruction / Required Action<textarea id="requiredAction" rows="3"></textarea></label>
           <div class="grid-3"><label>Related Task / Milestone<input id="relatedTask" /></label><label>Related Drawing / Revision<input id="relatedDrawing" /></label><label>Attachment Reference<input id="attachmentRef" placeholder="File name / Drive link / document ref." /></label></div>
+          <div class="image-upload-block">
+            <div class="image-upload-head"><div><b>Insert Image / Screenshot</b><span>Max. 4 images. JPG/PNG/WebP. Images are compressed automatically for storage and PDF.</span></div><label class="btn image-picker">+ Insert Image<input id="imageInput" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden /></label></div>
+            <div id="imagePreviewGrid" class="image-preview-grid"><div class="image-empty">No image attached.</div></div>
+          </div>
           <div class="grid-2"><label>Closed By<input id="closedBy" /></label><label>Closed Date<input id="closedDate" type="date" /></label></div>
           <div class="form-actions"><button type="button" id="saveDraftBtn" class="btn">Save Draft</button><button type="submit" class="btn btn-dark">Save RFI</button></div>
         </form>

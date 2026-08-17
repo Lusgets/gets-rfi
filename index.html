@@ -108,19 +108,23 @@
       </section>
 
       <section id="driveView" class="view">
-        <div class="panel content-panel"><h2>Drive Settings</h2><p class="muted">Simpan referensi folder Google Drive untuk dokumen RFI. Integrasi API dapat ditambahkan setelah backend aktif.</p>
+        <div class="panel content-panel"><h2>Drive Settings</h2><p class="muted">Konfigurasi penyimpanan dan backup RFI ke Google Drive. Backup data menggunakan Google Apps Script Web App.</p>
           <div class="settings-form">
             <label>Root RFI Folder URL<input id="driveRoot" placeholder="https://drive.google.com/drive/folders/..." /></label>
             <label>Folder Naming Pattern<input id="drivePattern" placeholder="[Project Code]/RFI/[RFI No.]" /></label>
             <label><span>PDF Naming Pattern</span><input id="pdfPattern" placeholder="[RFI No.]_[Subject].pdf" /></label>
-            <div class="form-actions left"><button id="saveDriveBtn" class="btn btn-dark">Save Drive Settings</button></div>
+            <label>Apps Script Web App URL<input id="appsScriptUrl" placeholder="https://script.google.com/macros/s/.../exec" /></label>
+            <label>Backup File Name<input id="backupFile" placeholder="GeTs_RFI_Backup.json" /></label>
+            <label class="check-label"><input id="autoBackup" type="checkbox" /> <span>Auto Backup after Save / Delete</span></label>
+            <div class="backup-status">Last backup: <b id="lastBackup">Never</b></div>
+            <div class="form-actions left drive-actions"><button id="saveDriveBtn" class="btn btn-dark">Save Drive Settings</button><button id="backupDriveBtn" class="btn">Backup Now to Drive</button><button id="downloadBackupBtn" class="btn">Download Backup JSON</button><label class="btn file-btn">Import Backup<input id="importBackupInput" type="file" accept="application/json,.json" hidden /></label></div>
           </div>
         </div>
       </section>
     </main>
   </div>
 
-  <div id="detailModal" class="modal hidden"><div class="modal-card"><div class="modal-head"><div><div class="eyebrow">REQUEST FOR INFORMATION</div><h2 id="detailTitle"></h2></div><button id="closeModal" class="icon-btn">×</button></div><div id="detailContent" class="detail-content"></div><div class="modal-actions"><button id="printBtn" class="btn">Print / Save PDF</button><button id="pdfBtn" class="btn btn-dark">Generate PDF</button><button id="editBtn" class="btn">Edit RFI</button></div></div></div>
+  <div id="detailModal" class="modal hidden"><div class="modal-card"><div class="modal-head"><div><div class="eyebrow">REQUEST FOR INFORMATION</div><h2 id="detailTitle"></h2></div><button id="closeModal" class="icon-btn">×</button></div><div id="detailContent" class="detail-content"></div><div class="modal-actions"><button id="printBtn" class="btn">Print / Save PDF</button><button id="pdfBtn" class="btn btn-dark">Generate PDF</button><button id="editBtn" class="btn">Edit RFI</button><button id="deleteBtn" class="btn btn-danger" onclick="deleteRFI(currentDetailId)">Delete RFI</button></div></div></div>
 
   <div id="userModal" class="modal hidden"><div class="modal-card small-modal"><div class="modal-head"><h2 id="userModalTitle">Add User</h2><button id="closeUserModal" class="icon-btn">×</button></div><form id="userForm" class="modal-form"><input type="hidden" id="userId"/><label>Name<input id="userName" required /></label><label>Username<input id="userUsername" required /></label><label>Role<select id="userRole"><option>Administrator</option><option>Director</option><option>Project Manager</option><option>Architect</option><option>Interior</option><option>Engineer</option><option>Viewer</option></select></label><label>Discipline<input id="userDiscipline" /></label><label>Status<select id="userStatus"><option>Active</option><option>Inactive</option></select></label><div class="form-actions"><button type="button" id="cancelUser" class="btn">Cancel</button><button class="btn btn-dark" type="submit">Save User</button></div></form></div></div>
 

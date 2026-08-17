@@ -5,16 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>GeTs RFI Control</title>
   <link rel="stylesheet" href="styles.css" />
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
   <div class="app-shell">
     <aside class="sidebar">
       <div class="brand">
-        <div class="brand-mark">G</div>
-        <div>
-          <div class="brand-title">GeTs Architects</div>
-          <div class="brand-sub">Project Control</div>
-        </div>
+        <img src="gets-logo.png" class="sidebar-logo" alt="GeTs" />
+        <div><div class="brand-title">GeTs Architects</div><div class="brand-sub">Project Control</div></div>
       </div>
       <nav>
         <button class="nav-item active" data-view="register">RFI Register</button>
@@ -25,12 +23,17 @@
 
     <main class="main">
       <header class="topbar">
-        <div>
-          <h1>RFI Control</h1>
-          <p>Formal clarification, response and closure tracking</p>
-        </div>
+        <div><h1>RFI Control</h1><p>Formal clarification, response and closure tracking</p></div>
         <button id="newRfiTop" class="btn btn-dark">+ New RFI</button>
       </header>
+
+      <div class="module-bar">
+        <button class="module-btn active" id="moduleRegister">RFI Register</button>
+        <button class="module-btn" id="moduleManual">Manual Pengisian RFI</button>
+        <button class="module-btn" id="moduleRefresh">Refresh</button>
+        <button class="module-btn" id="moduleUsers">User Management</button>
+        <button class="module-btn" id="moduleDrive">Drive Settings</button>
+      </div>
 
       <section id="registerView" class="view active-view">
         <div class="stats-grid">
@@ -39,7 +42,6 @@
           <div class="stat"><span>Overdue</span><strong id="statOverdue">0</strong></div>
           <div class="stat"><span>Closed</span><strong id="statClosed">0</strong></div>
         </div>
-
         <div class="panel">
           <div class="toolbar">
             <div class="filters">
@@ -48,127 +50,79 @@
               <select id="disciplineFilter"><option value="">All Discipline</option></select>
               <select id="phaseFilter"><option value="">All Phase</option></select>
             </div>
-            <div class="toolbar-actions">
-              <button id="exportBtn" class="btn">Export CSV</button>
-            </div>
+            <div class="toolbar-actions"><button id="exportBtn" class="btn">Export CSV</button></div>
           </div>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>RFI No.</th>
-                  <th>Date</th>
-                  <th>Subject</th>
-                  <th>Discipline</th>
-                  <th>Assigned To</th>
-                  <th>Due Date</th>
-                  <th>Impact</th>
-                  <th>Status</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="rfiTableBody"></tbody>
-            </table>
-          </div>
-          <div id="emptyState" class="empty-state">
-            <strong>No RFI yet</strong>
-            <span>Create your first RFI to start the register.</span>
-          </div>
+          <div class="table-wrap"><table><thead><tr><th>RFI No.</th><th>Date</th><th>Subject</th><th>Discipline</th><th>Assigned To</th><th>Due Date</th><th>Impact</th><th>Status</th><th></th></tr></thead><tbody id="rfiTableBody"></tbody></table></div>
+          <div id="emptyState" class="empty-state"><strong>No RFI yet</strong><span>Create your first RFI to start the register.</span></div>
         </div>
       </section>
 
       <section id="formView" class="view">
         <form id="rfiForm" class="panel form-panel">
-          <div class="form-header">
-            <div>
-              <div class="eyebrow">REQUEST FOR INFORMATION</div>
-              <h2 id="formTitle">New RFI</h2>
-            </div>
-            <button type="button" id="cancelForm" class="btn">Cancel</button>
-          </div>
-
+          <div class="form-header"><div><div class="eyebrow">REQUEST FOR INFORMATION</div><h2 id="formTitle">New RFI</h2></div><button type="button" id="cancelForm" class="btn">Cancel</button></div>
           <input type="hidden" id="recordId" />
-
           <div class="section-title">A. General Information</div>
           <div class="grid-4">
             <label>Project Name<input id="projectName" required placeholder="e.g. Mawatu Luxury Hotel" /></label>
             <label>Project Code<input id="projectCode" required placeholder="MWT" maxlength="8" /></label>
             <label>RFI No.<input id="rfiNo" placeholder="Auto-generated if blank" /></label>
             <label>Date Raised<input id="dateRaised" type="date" required /></label>
-
-            <label>Raised By<input id="raisedBy" required /></label>
-            <label>Assigned To<input id="assignedTo" required /></label>
-            <label>Discipline<select id="discipline" required></select></label>
-            <label>Project Phase<select id="projectPhase" required></select></label>
-
-            <label>Required Response Date<input id="dueDate" type="date" /></label>
-            <label>Priority<select id="priority"></select></label>
-            <label>Status<select id="status"></select></label>
-            <label>Company / Party<input id="companyParty" placeholder="Owner / Operator / Consultant / Contractor" /></label>
+            <label>Raised By<input id="raisedBy" required /></label><label>Assigned To<input id="assignedTo" required /></label>
+            <label>Discipline<select id="discipline" required></select></label><label>Project Phase<select id="projectPhase" required></select></label>
+            <label>Required Response Date<input id="dueDate" type="date" /></label><label>Priority<select id="priority"></select></label>
+            <label>Status<select id="status"></select></label><label>Company / Party<input id="companyParty" placeholder="Owner / Operator / Consultant / Contractor" /></label>
           </div>
-
-          <div class="section-title">B. RFI Subject</div>
-          <label>Subject / Title<input id="subject" required placeholder="Short, specific issue title" /></label>
-
+          <div class="section-title">B. RFI Subject</div><label>Subject / Title<input id="subject" required placeholder="Short, specific issue title" /></label>
           <div class="section-title">C. Description / Information Required</div>
-          <div class="grid-2">
-            <label>Background / Issue<textarea id="background" rows="5" required></textarea></label>
-            <label>Question / Clarification Required<textarea id="question" rows="5" required></textarea></label>
-          </div>
+          <div class="grid-2"><label>Background / Issue<textarea id="background" rows="5" required></textarea></label><label>Question / Clarification Required<textarea id="question" rows="5" required></textarea></label></div>
           <label>Reference Documents / Drawings / Location<textarea id="reference" rows="3" placeholder="Drawing no., document revision, area/location..."></textarea></label>
-
-          <div class="section-title">D. Proposed Recommendation</div>
-          <label>Proposed Solution / Recommendation<textarea id="recommendation" rows="4" placeholder="Optional"></textarea></label>
-
-          <div class="section-title">E. Potential Impact</div>
-          <div class="grid-2">
-            <label>Impact Category<select id="impact"></select></label>
-            <label>Potential Impact / Remarks<textarea id="impactRemarks" rows="3"></textarea></label>
-          </div>
-
-          <div class="section-title">F. Response / Decision</div>
-          <label>Response / Decision<textarea id="response" rows="5"></textarea></label>
-          <div class="grid-3">
-            <label>Responded By<input id="respondedBy" /></label>
-            <label>Response Date<input id="responseDate" type="date" /></label>
-            <label>Response Discipline / Party<input id="responseParty" /></label>
-          </div>
-
-          <div class="section-title">G. Required Action / Closure</div>
-          <label>Instruction / Required Action<textarea id="requiredAction" rows="3"></textarea></label>
-          <div class="grid-3">
-            <label>Related Task / Milestone<input id="relatedTask" /></label>
-            <label>Related Drawing / Revision<input id="relatedDrawing" /></label>
-            <label>Attachment Reference<input id="attachmentRef" placeholder="File name / Drive link / document ref." /></label>
-          </div>
-          <div class="grid-2">
-            <label>Closed By<input id="closedBy" /></label>
-            <label>Closed Date<input id="closedDate" type="date" /></label>
-          </div>
-
-          <div class="form-actions">
-            <button type="button" id="saveDraftBtn" class="btn">Save Draft</button>
-            <button type="submit" class="btn btn-dark">Save RFI</button>
-          </div>
+          <div class="section-title">D. Proposed Recommendation</div><label>Proposed Solution / Recommendation<textarea id="recommendation" rows="4" placeholder="Optional"></textarea></label>
+          <div class="section-title">E. Potential Impact</div><div class="grid-2"><label>Impact Category<select id="impact"></select></label><label>Potential Impact / Remarks<textarea id="impactRemarks" rows="3"></textarea></label></div>
+          <div class="section-title">F. Response / Decision</div><label>Response / Decision<textarea id="response" rows="5"></textarea></label>
+          <div class="grid-3"><label>Responded By<input id="respondedBy" /></label><label>Response Date<input id="responseDate" type="date" /></label><label>Response Discipline / Party<input id="responseParty" /></label></div>
+          <div class="section-title">G. Required Action / Closure</div><label>Instruction / Required Action<textarea id="requiredAction" rows="3"></textarea></label>
+          <div class="grid-3"><label>Related Task / Milestone<input id="relatedTask" /></label><label>Related Drawing / Revision<input id="relatedDrawing" /></label><label>Attachment Reference<input id="attachmentRef" placeholder="File name / Drive link / document ref." /></label></div>
+          <div class="grid-2"><label>Closed By<input id="closedBy" /></label><label>Closed Date<input id="closedDate" type="date" /></label></div>
+          <div class="form-actions"><button type="button" id="saveDraftBtn" class="btn">Save Draft</button><button type="submit" class="btn btn-dark">Save RFI</button></div>
         </form>
+      </section>
+
+      <section id="manualView" class="view">
+        <div class="panel content-panel"><h2>Manual Pengisian RFI</h2><p class="lead">Gunakan RFI untuk klarifikasi atau keputusan formal yang dapat memengaruhi desain, scope, biaya, jadwal, kualitas, atau koordinasi antar-disiplin.</p>
+          <div class="manual-grid">
+            <div><h3>1. General Information</h3><p>Isi Project, RFI No., tanggal, pengaju, pihak yang harus menjawab, disiplin, fase, due date, priority, dan status.</p></div>
+            <div><h3>2. Subject</h3><p>Gunakan judul singkat dan spesifik. Hindari judul umum seperti “Clarification” saja.</p></div>
+            <div><h3>3. Background & Question</h3><p>Jelaskan masalah/fakta terlebih dahulu, kemudian tulis satu pertanyaan atau keputusan yang dibutuhkan secara eksplisit.</p></div>
+            <div><h3>4. Reference</h3><p>Cantumkan nomor drawing, revision, specification, area/lokasi, atau dokumen terkait agar jawaban dapat diverifikasi.</p></div>
+            <div><h3>5. Recommendation & Impact</h3><p>Usulan solusi bersifat opsional. Tandai dampaknya: Design, Schedule, Cost, Scope, Quality, atau Coordination.</p></div>
+            <div><h3>6. Response & Closure</h3><p>Status Answered berarti jawaban sudah diterima. Gunakan Closed setelah seluruh follow-up/revisi terkait sudah dilaksanakan.</p></div>
+          </div>
+          <div class="manual-note"><b>Workflow:</b> Draft → Open → Pending Response → Answered → Closed. Cancelled digunakan hanya jika RFI dibatalkan/tidak lagi relevan.</div>
+        </div>
+      </section>
+
+      <section id="usersView" class="view">
+        <div class="panel content-panel"><div class="panel-head"><div><h2>User Management</h2><p class="muted">Konfigurasi lokal untuk MVP. Nanti dipindahkan ke Supabase Auth/permissions.</p></div><button id="addUserBtn" class="btn btn-dark">+ Add User</button></div>
+          <div class="table-wrap"><table class="compact-table"><thead><tr><th>Name</th><th>Username</th><th>Role</th><th>Discipline</th><th>Status</th><th></th></tr></thead><tbody id="userTableBody"></tbody></table></div>
+        </div>
+      </section>
+
+      <section id="driveView" class="view">
+        <div class="panel content-panel"><h2>Drive Settings</h2><p class="muted">Simpan referensi folder Google Drive untuk dokumen RFI. Integrasi API dapat ditambahkan setelah backend aktif.</p>
+          <div class="settings-form">
+            <label>Root RFI Folder URL<input id="driveRoot" placeholder="https://drive.google.com/drive/folders/..." /></label>
+            <label>Folder Naming Pattern<input id="drivePattern" placeholder="[Project Code]/RFI/[RFI No.]" /></label>
+            <label><span>PDF Naming Pattern</span><input id="pdfPattern" placeholder="[RFI No.]_[Subject].pdf" /></label>
+            <div class="form-actions left"><button id="saveDriveBtn" class="btn btn-dark">Save Drive Settings</button></div>
+          </div>
+        </div>
       </section>
     </main>
   </div>
 
-  <div id="detailModal" class="modal hidden">
-    <div class="modal-card">
-      <div class="modal-head">
-        <div><div class="eyebrow">REQUEST FOR INFORMATION</div><h2 id="detailTitle"></h2></div>
-        <button id="closeModal" class="icon-btn">×</button>
-      </div>
-      <div id="detailContent" class="detail-content"></div>
-      <div class="modal-actions">
-        <button id="printBtn" class="btn">Print / Save PDF</button>
-        <button id="editBtn" class="btn btn-dark">Edit RFI</button>
-      </div>
-    </div>
-  </div>
+  <div id="detailModal" class="modal hidden"><div class="modal-card"><div class="modal-head"><div><div class="eyebrow">REQUEST FOR INFORMATION</div><h2 id="detailTitle"></h2></div><button id="closeModal" class="icon-btn">×</button></div><div id="detailContent" class="detail-content"></div><div class="modal-actions"><button id="printBtn" class="btn">Print / Save PDF</button><button id="pdfBtn" class="btn btn-dark">Generate PDF</button><button id="editBtn" class="btn">Edit RFI</button></div></div></div>
+
+  <div id="userModal" class="modal hidden"><div class="modal-card small-modal"><div class="modal-head"><h2 id="userModalTitle">Add User</h2><button id="closeUserModal" class="icon-btn">×</button></div><form id="userForm" class="modal-form"><input type="hidden" id="userId"/><label>Name<input id="userName" required /></label><label>Username<input id="userUsername" required /></label><label>Role<select id="userRole"><option>Administrator</option><option>Director</option><option>Project Manager</option><option>Architect</option><option>Interior</option><option>Engineer</option><option>Viewer</option></select></label><label>Discipline<input id="userDiscipline" /></label><label>Status<select id="userStatus"><option>Active</option><option>Inactive</option></select></label><div class="form-actions"><button type="button" id="cancelUser" class="btn">Cancel</button><button class="btn btn-dark" type="submit">Save User</button></div></form></div></div>
 
   <script src="app.js"></script>
 </body>
